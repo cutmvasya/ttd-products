@@ -175,7 +175,7 @@ module.exports = {
 
             return res.status(200).json({
                 status: "success",
-                message: "Successfully retrieved the product",
+                message: "Successfully delete the product",
             });
 
         } catch (error) {
@@ -256,7 +256,7 @@ module.exports = {
 
             return res.status(200).json({
                 status: "success",
-                message: "Successfully retrieved the product",
+                message: "Successfully updated the product",
                 data: product,
             });
 
