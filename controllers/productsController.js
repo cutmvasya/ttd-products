@@ -67,7 +67,6 @@ module.exports = {
             });
 
         } catch (error) {
-            console.log("🚀 ~ file: productsController.js ~ line 69 ~ addProduct:async ~ error", error)
             return res.status(500).json({
                 status: "failed",
                 message: "Internal Server Error",
@@ -81,7 +80,8 @@ module.exports = {
             const allProducts = await Product.findAll({
                 where: {
                     isActive: true
-                }
+                },
+                attribute: { exclude: ['deletedAt'] }
             });
 
             if (!allProducts) {
@@ -115,6 +115,7 @@ module.exports = {
                 where: {
                     id,
                 },
+                attribute: { exclude: ['deletedAt'] }
             });
 
             if (!findProduct) {
@@ -260,7 +261,6 @@ module.exports = {
             });
 
         } catch (error) {
-            console.log("🚀 ~ file: productsController.js ~ line 262 ~ updateProduct:async ~ error", error)
             return res.status(500).json({
                 status: "failed",
                 message: "Internal Server Error",
