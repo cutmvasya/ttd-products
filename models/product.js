@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         }
     };
     Product.init({
-        id: DataTypes.BIGINT,
         name: DataTypes.STRING,
         qty: DataTypes.INTEGER,
         picture: DataTypes.TEXT,
@@ -22,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         isActive: {
             type: DataTypes.BOOLEAN,
             defaultValue: true
-        }
+        },
+        deletedAt: DataTypes.DATEONLY,
     }, {
         sequelize,
         modelName: 'Product',

@@ -23,6 +23,9 @@ module.exports = {
             isActive: {
                 type: Sequelize.BOOLEAN
             },
+            deletedAt: {
+                type: Sequelize.DATEONLY
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE
