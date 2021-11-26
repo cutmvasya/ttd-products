@@ -81,7 +81,7 @@ module.exports = {
                 where: {
                     isActive: true
                 },
-                attribute: { exclude: ['deletedAt'] }
+                attributes: { exclude: ['deletedAt'] }
             });
 
             if (!allProducts) {
@@ -115,7 +115,7 @@ module.exports = {
                 where: {
                     id,
                 },
-                attribute: { exclude: ['deletedAt'] }
+                attributes: { exclude: ['deletedAt'] }
             });
 
             if (!findProduct) {
