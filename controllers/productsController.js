@@ -2,6 +2,7 @@ const { Product } = require('../models');
 const Joi = require('joi')
     .extend(require('@joi/date'));
 const btoa = require('btoa');
+const { Op } = require('sequelize')
 
 module.exports = {
     addProduct: async(req, res) => {
@@ -76,8 +77,149 @@ module.exports = {
     },
 
     getProducts: async(req, res) => {
+        const { name, sorter } = req.query
         try {
-            const allProducts = await Product.findAll({
+            let allProducts;
+            if (name) {
+                if (sorter == 'lowest' || sorter == 'Lowest') {
+                    allProducts = await Product.findAll({
+                        distinct: true,
+                        where: {
+                            name: {
+                                [Op.iLike]: '%' + name + '%',
+                            },
+                            isActive: true
+                        },
+                        order: [
+                            ['qty', 'ASC']
+                        ]
+                    })
+
+                    if (!allProducts) {
+                        return res.status(400).json({
+                            status: 'failed',
+                            message: 'Product not found',
+                            data: null,
+                        });
+                    }
+
+                    return res.status(200).json({
+                        status: 'success',
+                        message: 'Successfully retrieved the products',
+                        data: allProducts,
+                    });
+                }
+
+                if (sorter == 'highest' || sorter == 'Highest') {
+                    allProducts = await Product.findAll({
+                        distinct: true,
+                        where: {
+                            name: {
+                                [Op.iLike]: '%' + name + '%',
+                            },
+                            isActive: true,
+                        },
+                        order: [
+                            ['qty', 'DESC']
+                        ]
+                    });
+
+                    if (!allProducts) {
+                        return res.status(400).json({
+                            status: 'failed',
+                            message: 'Product not found',
+                            data: null,
+                        });
+                    }
+
+                    return res.status(200).json({
+                        status: 'success',
+                        message: 'Successfully retrieved the products',
+                        data: allProducts,
+                    });
+                }
+
+                allProducts = await Product.findAll({
+                    distinct: true,
+                    where: {
+                        name: {
+                            [Op.iLike]: '%' + name + '%',
+                        },
+                        isActive: true
+                    },
+                });
+
+                if (!allProducts) {
+                    return res.status(400).json({
+                        status: 'failed',
+                        message: 'Product not found',
+                        data: null,
+                    });
+                }
+
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Successfully retrieved the products',
+                    data: allProducts,
+                });
+            }
+
+            if (sorter) {
+                if (sorter == 'lowest' || sorter == 'Lowest') {
+                    allProducts = await Product.findAll({
+                        distinct: true,
+                        where: {
+                            isActive: true
+                        },
+                        order: [
+                            ['qty', 'ASC']
+                        ]
+                    })
+
+                    if (!allProducts) {
+                        return res.status(400).json({
+                            status: 'failed',
+                            message: 'Product not found',
+                            data: null,
+                        });
+                    }
+
+                    return res.status(200).json({
+                        status: 'success',
+                        message: 'Successfully retrieved the products',
+                        data: allProducts,
+                    });
+                }
+
+                if (sorter == 'highest' || sorter == 'Highest') {
+                    allProducts = await Product.findAll({
+                        distinct: true,
+                        where: {
+                            isActive: true,
+                        },
+                        order: [
+                            ['qty', 'DESC']
+                        ]
+                    });
+
+                    if (!allProducts) {
+                        return res.status(400).json({
+                            status: 'failed',
+                            message: 'Product not found',
+                            data: null,
+                        });
+                    }
+
+                    return res.status(200).json({
+                        status: 'success',
+                        message: 'Successfully retrieved the products',
+                        data: allProducts,
+                    });
+                }
+
+            }
+
+            allProducts = await Product.findAll({
                 where: {
                     isActive: true
                 },
@@ -99,6 +241,7 @@ module.exports = {
             });
 
         } catch (error) {
+            console.log("🚀 ~ file: productsController.js ~ line 187 ~ getProducts:async ~ error", error)
             return res.status(500).json({
                 status: "failed",
                 message: "Internal Server Error",
